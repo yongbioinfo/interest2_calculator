@@ -88,6 +88,9 @@
             <option value="equalPrincipal">원금 균등</option>
         </select>
 
+        <label for="monthsPaid">지금까지 상환 개월수:</label>
+        <input type="number" id="monthsPaid" value="0">
+
         <button onclick="calculateInterest()">계산하기</button>
 
         <h3>총 이자: <span class="value" id="interest">0</span> 원</h3>
@@ -102,29 +105,35 @@
         var rate = parseFloat(document.getElementById('rate').value) / 100;
         var period = parseFloat(document.getElementById('period').value);
         var repaymentMethod = document.getElementById('repayment').value;
-    
+        var monthsPaid = parseFloat(document.getElementById('monthsPaid').value);            
         var totalInterest = principal * rate * (period / 12);
         var monthlyInterest = totalInterest / period;
-    
         var monthlyRepayment;
         var remainingLoan = principal;
+            
         if (repaymentMethod === "interestOnly") {
             monthlyRepayment = monthlyInterest;
         } else if (repaymentMethod === "equalPrincipalAndInterest") {
             var r = rate / 12;
             monthlyRepayment = principal * r * Math.pow((1 + r), period) / (Math.pow((1 + r), period) - 1);
-            remainingLoan = (principal * Math.pow((1 + r), period) - monthlyRepayment * ((Math.pow((1 + r), period) - 1) / r));
+            for (let i = 0; i < monthsPaid; i++) {
+                remainingLoan = (remainingLoan - (monthlyRepayment - remainingLoan * r));
+            }
         } else if (repaymentMethod === "equalPrincipal") {
-            monthlyRepayment = (principal / period) + (principal * rate / 12);
-            remainingLoan = principal - principal / period; // 첫 달 이후 남은 대출금
+        monthlyRepayment = (principal / period) + (principal * rate / 12);
+            for (let i = 0; i < monthsPaid; i++) {
+                remainingLoan -= (principal / period);
+            }
         }
-        
+            
         document.getElementById('interest').textContent = totalInterest.toFixed(2) + " 원";
         document.getElementById('monthlyInterest').textContent = monthlyInterest.toFixed(2) + " 원";
         document.getElementById('monthlyRepayment').textContent = monthlyRepayment.toFixed(2) + " 원";
         document.getElementById('remainingLoan').textContent = remainingLoan.toFixed(2) + " 원";
     }
 </script>
+    
+
 
 </body>
 </html>
