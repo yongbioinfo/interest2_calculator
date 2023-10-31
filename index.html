@@ -103,9 +103,15 @@
         function formatNumber(num) {
             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
+        
+        // 콤마로 구분된 문자열을 숫자로 변환하는 함수
+        function parseFormattedNumber(str) {
+            return parseFloat(str.replace(/,/g, ''));
+        }
     
         function calculateInterest() {
-            var principal = parseFloat(document.getElementById('principal').value);
+            var principalStr = document.getElementById('principal').value;
+            var principal = parseFormattedNumber(principalStr);
             var rate = parseFloat(document.getElementById('rate').value) / 100;
             var period = parseFloat(document.getElementById('period').value);
             var repaymentMethod = document.getElementById('repayment').value;
@@ -131,10 +137,15 @@
                 }
             }
             
-            document.getElementById('interest').textContent = Math.round(totalInterest) ;
-            document.getElementById('monthlyInterest').textContent = Math.round(monthlyInterest) ;
-            document.getElementById('monthlyRepayment').textContent = Math.round(monthlyRepayment) ;
-            document.getElementById('remainingLoan').textContent = Math.round(remainingLoan) ;
+            document.getElementById('interest').textContent = formatNumber(Math.round(totalInterest)) + " 원";
+            document.getElementById('monthlyInterest').textContent = formatNumber(Math.round(monthlyInterest)) + " 원";
+            document.getElementById('monthlyRepayment').textContent = formatNumber(Math.round(monthlyRepayment)) + " 원";
+            document.getElementById('remainingLoan').textContent = formatNumber(Math.round(remainingLoan)) + " 원";
+        }
+
+        document.getElementById('principal').addEventListener('input', function() {
+            var formattedValue = formatNumber(parseFormattedNumber(this.value));
+            this.value = formattedValue;
         }
     </script>
     
