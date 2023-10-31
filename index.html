@@ -4,6 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>대출 이자 계산기</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f7fa;
+            padding: 30px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        label, input, button {
+            margin-bottom: 20px;
+        }
+
+        input, button {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #d1d4d8;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        h3 {
+            color: #666;
+        }
+    </style>
 </head>
 <body>
 
@@ -32,8 +71,8 @@
         var rate = parseFloat(document.getElementById('rate').value) / 100;
         var period = parseFloat(document.getElementById('period').value);
 
-        var totalInterest = principal * rate * (period / 12);  // 월을 기준으로 총 이자 계산
-        var monthlyInterest = totalInterest / period;  // 월별 이자 납부액 계산
+        var totalInterest = principal * rate * (period / 12);
+        var monthlyInterest = totalInterest / period;
 
         document.getElementById('interest').textContent = totalInterest.toFixed(2) + " 원";
         document.getElementById('monthlyInterest').textContent = monthlyInterest.toFixed(2) + " 원";
