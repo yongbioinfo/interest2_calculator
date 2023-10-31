@@ -100,25 +100,7 @@
     </div>
 
     <script>
-        function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-    
-        // 숫자를 억/만 단위로 표시하는 함수
-        function displayInBillions(num) {
-            const billions = Math.floor(num / 100000000);
-            const tenMillions = Math.floor((num % 100000000) / 10000);
-            let displayStr = '';
-            
-            if (billions) {
-                displayStr += billions + '억 ';
-            }
-            if (tenMillions) {
-                displayStr += tenMillions + '만원';
-            }
-            return displayStr.trim();
-        }
-    
+        
         function calculateInterest() {
             var principal = parseFloat(document.getElementById('principal').value);
             var rate = parseFloat(document.getElementById('rate').value) / 100;
@@ -146,10 +128,10 @@
                 }
             }
             
-            document.getElementById('interest').textContent = Math.round(totalInterest) + " 원";
-            document.getElementById('monthlyInterest').textContent = Math.round(monthlyInterest) + " 원";
-            document.getElementById('monthlyRepayment').textContent = Math.round(monthlyRepayment) + " 원";
-            document.getElementById('remainingLoan').textContent = Math.round(remainingLoan) + " 원";
+            document.getElementById('interest').textContent = Math.round(totalInterest) ;
+            document.getElementById('monthlyInterest').textContent = Math.round(monthlyInterest) ;
+            document.getElementById('monthlyRepayment').textContent = Math.round(monthlyRepayment) ;
+            document.getElementById('remainingLoan').textContent = Math.round(remainingLoan) ;
         }
     </script>
     
