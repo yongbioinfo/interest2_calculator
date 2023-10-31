@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대출 이자 계산기</title>
+</head>
+<body>
+
+<h2>대출이자 계산기</h2>
+
+<label for="principal">대출금액:</label>
+<input type="number" id="principal" placeholder="대출금액을 입력하세요">
+<br>
+
+<label for="rate">이자율:</label>
+<input type="number" id="rate" step="0.1" placeholder="이자율을 입력하세요 (%)"> %
+<br>
+
+<label for="period">대출기간:</label>
+<input type="number" id="period" placeholder="대출기간을 입력하세요 (월)">
+<br>
+
+<button onclick="calculateInterest()">이자 계산하기</button>
+
+<h3>이자: <span id="interest">0</span> 원</h3>
+
+<script>
+    function calculateInterest() {
+        var principal = parseFloat(document.getElementById('principal').value);
+        var rate = parseFloat(document.getElementById('rate').value) / 100;
+        var period = parseFloat(document.getElementById('period').value);
+
+        var interest = principal * rate * (period / 12);  // 월을 기준으로 계산
+
+        document.getElementById('interest').textContent = interest.toFixed(2) + " 원";
+    }
+</script>
+
+</body>
+</html>
