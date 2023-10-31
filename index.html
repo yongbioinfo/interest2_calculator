@@ -1,85 +1,100 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>대출 이자 계산기</title>
+    <title>대출이자 계산기</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f7fa;
-            padding: 30px;
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            background-color: #f5f5f5;
         }
-
         .container {
-            background-color: white;
-            padding: 40px;
+            padding: 20px;
+            background-color: #ffffff;
             border-radius: 8px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
         }
-
-        label, input, button {
+        h2 {
+            text-align: center;
             margin-bottom: 20px;
         }
-
-        input, button {
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        select, input[type="text"], input[type="number"] {
+            width: 100%;
             padding: 10px;
-            width: 200px;
-            border: 1px solid #d1d4d8;
+            margin-top: 5px;
+            border: 1px solid #e1e1e1;
             border-radius: 5px;
+            font-size: 16px;
         }
-
         button {
-            background-color: #4CAF50;
-            color: white;
+            margin-top: 15px;
+            padding: 10px;
+            width: 100%;
+            background-color: #007BFF;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-
         button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
-
         h3 {
-            color: #666;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 20px;
+            color: #007BFF;
+        }
+        span.value {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h2>대출이자 계산기</h2>
+        <label for="principal">대출금액:</label>
+        <input type="number" id="principal">
+        
+        <label for="rate">이자율 (%):</label>
+        <input type="range" id="rateRange" min="0" max="20" step="0.1" value="5" oninput="displayRate(this.value)">
+        <input type="text" id="rate" value="5">
+        <script>
+            function displayRate(val) {
+                document.getElementById('rate').value = val;
+                calculateInterest();
+            }
+        </script>
+        
+        <label for="period">대출기간 (월):</label>
+        <input type="number" id="period">
 
-<div class="container">
-    <h2>대출이자 계산기</h2>
+        <label for="repayment">상환 방식:</label>
+        <select id="repayment">
+            <option value="interestOnly">이자만 상환</option>
+            <option value="equalPrincipalAndInterest">원리금 균등</option>
+            <option value="equalPrincipal">원금 균등</option>
+        </select>
 
-    <label for="repayment">상환 방식:</label>
-    <select id="repayment">
-        <option value="interestOnly">이자만 상환</option>
-        <option value="equalPrincipalAndInterest">원리금 균등</option>
-        <option value="equalPrincipal">원금 균등</option>
-    </select>
-    <br>
+        <button onclick="calculateInterest()">계산하기</button>
 
-    <label for="principal">대출금액:</label>
-    <input type="number" id="principal" placeholder="대출금액을 입력하세요">
-    <br>
-
-    <label for="rate">이자율:</label>
-    <input type="number" id="rate" step="0.1" placeholder="이자율을 입력하세요 (%)"> %
-    <br>
-
-    <label for="period">대출기간:</label>
-    <input type="number" id="period" placeholder="대출기간을 입력하세요 (월)">
-    <br>
-
-    <button onclick="calculateInterest()">이자 계산하기</button>
-
-    <h3>총 이자: <span id="interest">0</span> 원</h3>
-    <h3>월별 이자 납부액: <span id="monthlyInterest">0</span> 원</h3>
-    <h3>월 상환액: <span id="monthlyRepayment">0</span> 원</h3>
-</div>
+        <h3>총 이자: <span class="value" id="interest">0</span> 원</h3>
+        <h3>월 이자: <span class="value" id="monthlyInterest">0</span> 원</h3>
+        <h3>월 상환액: <span class="value" id="monthlyRepayment">0</span> 원</h3>
+        <h3>남은 대출금: <span class="value" id="remainingLoan">0</span> 원</h3>
+    </div>
 
 <script>
     function calculateInterest() {
@@ -87,22 +102,27 @@
         var rate = parseFloat(document.getElementById('rate').value) / 100;
         var period = parseFloat(document.getElementById('period').value);
         var repaymentMethod = document.getElementById('repayment').value;
-
+    
         var totalInterest = principal * rate * (period / 12);
         var monthlyInterest = totalInterest / period;
-        
+    
         var monthlyRepayment;
+        var remainingLoan = principal;
         if (repaymentMethod === "interestOnly") {
             monthlyRepayment = monthlyInterest;
         } else if (repaymentMethod === "equalPrincipalAndInterest") {
-            monthlyRepayment = (principal / period) + (principal * rate / 12);
+            var r = rate / 12;
+            monthlyRepayment = principal * r * Math.pow((1 + r), period) / (Math.pow((1 + r), period) - 1);
+            remainingLoan = (principal * Math.pow((1 + r), period) - monthlyRepayment * ((Math.pow((1 + r), period) - 1) / r));
         } else if (repaymentMethod === "equalPrincipal") {
-            monthlyRepayment = (principal / period) + (principal - (principal / period) * (period - 1)) * rate / 12;
+            monthlyRepayment = (principal / period) + (principal * rate / 12);
+            remainingLoan = principal - principal / period; // 첫 달 이후 남은 대출금
         }
-
+        
         document.getElementById('interest').textContent = totalInterest.toFixed(2) + " 원";
         document.getElementById('monthlyInterest').textContent = monthlyInterest.toFixed(2) + " 원";
         document.getElementById('monthlyRepayment').textContent = monthlyRepayment.toFixed(2) + " 원";
+        document.getElementById('remainingLoan').textContent = remainingLoan.toFixed(2) + " 원";
     }
 </script>
 
