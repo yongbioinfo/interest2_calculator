@@ -99,39 +99,41 @@
         <h3>남은 대출금: <span class="value" id="remainingLoan">0</span> 원</h3>
     </div>
 
-<script>
-    function calculateInterest() {
-        var principal = parseFloat(document.getElementById('principal').value);
-        var rate = parseFloat(document.getElementById('rate').value) / 100;
-        var period = parseFloat(document.getElementById('period').value);
-        var repaymentMethod = document.getElementById('repayment').value;
-        var monthsPaid = parseFloat(document.getElementById('monthsPaid').value);            
-        var totalInterest = principal * rate * (period / 12);
-        var monthlyInterest = totalInterest / period;
-        var monthlyRepayment;
-        var remainingLoan = principal;
+    <script>
+        function calculateInterest() {
+            var principal = parseFloat(document.getElementById('principal').value);
+            var rate = parseFloat(document.getElementById('rate').value) / 100;
+            var period = parseFloat(document.getElementById('period').value);
+            var repaymentMethod = document.getElementById('repayment').value;
+            var monthsPaid = parseFloat(document.getElementById('monthsPaid').value);
             
-        if (repaymentMethod === "interestOnly") {
-            monthlyRepayment = monthlyInterest;
-        } else if (repaymentMethod === "equalPrincipalAndInterest") {
-            var r = rate / 12;
-            monthlyRepayment = principal * r * Math.pow((1 + r), period) / (Math.pow((1 + r), period) - 1);
-            for (let i = 0; i < monthsPaid; i++) {
-                remainingLoan = (remainingLoan - (monthlyRepayment - remainingLoan * r));
+            var totalInterest = principal * rate * (period / 12);
+            var monthlyInterest = totalInterest / period;
+            var monthlyRepayment;
+            var remainingLoan = principal;
+            
+            if (repaymentMethod === "interestOnly") {
+                monthlyRepayment = monthlyInterest;
+            } else if (repaymentMethod === "equalPrincipalAndInterest") {
+                var r = rate / 12;
+                monthlyRepayment = principal * r * Math.pow((1 + r), period) / (Math.pow((1 + r), period) - 1);
+                for (let i = 0; i < monthsPaid; i++) {
+                    remainingLoan = (remainingLoan - (monthlyRepayment - remainingLoan * r));
+                }
+            } else if (repaymentMethod === "equalPrincipal") {
+                monthlyRepayment = (principal / period) + (principal * rate / 12);
+                for (let i = 0; i < monthsPaid; i++) {
+                    remainingLoan -= (principal / period);
+                }
             }
-        } else if (repaymentMethod === "equalPrincipal") {
-        monthlyRepayment = (principal / period) + (principal * rate / 12);
-            for (let i = 0; i < monthsPaid; i++) {
-                remainingLoan -= (principal / period);
-            }
+            
+            document.getElementById('interest').textContent = Math.round(totalInterest) + " 원";
+            document.getElementById('monthlyInterest').textContent = Math.round(monthlyInterest) + " 원";
+            document.getElementById('monthlyRepayment').textContent = Math.round(monthlyRepayment) + " 원";
+            document.getElementById('remainingLoan').textContent = Math.round(remainingLoan) + " 원";
         }
-            
-        document.getElementById('interest').textContent = totalInterest.toFixed(2) + " 원";
-        document.getElementById('monthlyInterest').textContent = monthlyInterest.toFixed(2) + " 원";
-        document.getElementById('monthlyRepayment').textContent = monthlyRepayment.toFixed(2) + " 원";
-        document.getElementById('remainingLoan').textContent = remainingLoan.toFixed(2) + " 원";
-    }
-</script>
+    </script>
+    
     
 
 
