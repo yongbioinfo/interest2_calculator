@@ -100,7 +100,10 @@
     </div>
 
     <script>
-        
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    
         function calculateInterest() {
             var principal = parseFloat(document.getElementById('principal').value);
             var rate = parseFloat(document.getElementById('rate').value) / 100;
