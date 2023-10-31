@@ -100,6 +100,25 @@
     </div>
 
     <script>
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    
+        // 숫자를 억/만 단위로 표시하는 함수
+        function displayInBillions(num) {
+            const billions = Math.floor(num / 100000000);
+            const tenMillions = Math.floor((num % 100000000) / 10000);
+            let displayStr = '';
+            
+            if (billions) {
+                displayStr += billions + '억 ';
+            }
+            if (tenMillions) {
+                displayStr += tenMillions + '만원';
+            }
+            return displayStr.trim();
+        }
+    
         function calculateInterest() {
             var principal = parseFloat(document.getElementById('principal').value);
             var rate = parseFloat(document.getElementById('rate').value) / 100;
