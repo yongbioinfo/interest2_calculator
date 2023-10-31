@@ -23,7 +23,8 @@
 
 <button onclick="calculateInterest()">이자 계산하기</button>
 
-<h3>이자: <span id="interest">0</span> 원</h3>
+<h3>총 이자: <span id="interest">0</span> 원</h3>
+<h3>월별 이자 납부액: <span id="monthlyInterest">0</span> 원</h3>
 
 <script>
     function calculateInterest() {
@@ -31,9 +32,11 @@
         var rate = parseFloat(document.getElementById('rate').value) / 100;
         var period = parseFloat(document.getElementById('period').value);
 
-        var interest = principal * rate * (period / 12);  // 월을 기준으로 계산
+        var totalInterest = principal * rate * (period / 12);  // 월을 기준으로 총 이자 계산
+        var monthlyInterest = totalInterest / period;  // 월별 이자 납부액 계산
 
-        document.getElementById('interest').textContent = interest.toFixed(2) + " 원";
+        document.getElementById('interest').textContent = totalInterest.toFixed(2) + " 원";
+        document.getElementById('monthlyInterest').textContent = monthlyInterest.toFixed(2) + " 원";
     }
 </script>
 
