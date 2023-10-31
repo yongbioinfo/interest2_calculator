@@ -9,12 +9,17 @@
             font-family: 'Arial', sans-serif;
             background-color: #f5f7fa;
             padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 40px;
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         label, input, button {
@@ -46,36 +51,58 @@
 </head>
 <body>
 
-<h2>대출이자 계산기</h2>
+<div class="container">
+    <h2>대출이자 계산기</h2>
 
-<label for="principal">대출금액:</label>
-<input type="number" id="principal" placeholder="대출금액을 입력하세요">
-<br>
+    <label for="repayment">상환 방식:</label>
+    <select id="repayment">
+        <option value="interestOnly">이자만 상환</option>
+        <option value="equalPrincipalAndInterest">원리금 균등</option>
+        <option value="equalPrincipal">원금 균등</option>
+    </select>
+    <br>
 
-<label for="rate">이자율:</label>
-<input type="number" id="rate" step="0.1" placeholder="이자율을 입력하세요 (%)"> %
-<br>
+    <label for="principal">대출금액:</label>
+    <input type="number" id="principal" placeholder="대출금액을 입력하세요">
+    <br>
 
-<label for="period">대출기간:</label>
-<input type="number" id="period" placeholder="대출기간을 입력하세요 (월)">
-<br>
+    <label for="rate">이자율:</label>
+    <input type="number" id="rate" step="0.1" placeholder="이자율을 입력하세요 (%)"> %
+    <br>
 
-<button onclick="calculateInterest()">이자 계산하기</button>
+    <label for="period">대출기간:</label>
+    <input type="number" id="period" placeholder="대출기간을 입력하세요 (월)">
+    <br>
 
-<h3>총 이자: <span id="interest">0</span> 원</h3>
-<h3>월별 이자 납부액: <span id="monthlyInterest">0</span> 원</h3>
+    <button onclick="calculateInterest()">이자 계산하기</button>
+
+    <h3>총 이자: <span id="interest">0</span> 원</h3>
+    <h3>월별 이자 납부액: <span id="monthlyInterest">0</span> 원</h3>
+    <h3>월 상환액: <span id="monthlyRepayment">0</span> 원</h3>
+</div>
 
 <script>
     function calculateInterest() {
         var principal = parseFloat(document.getElementById('principal').value);
         var rate = parseFloat(document.getElementById('rate').value) / 100;
         var period = parseFloat(document.getElementById('period').value);
+        var repaymentMethod = document.getElementById('repayment').value;
 
         var totalInterest = principal * rate * (period / 12);
         var monthlyInterest = totalInterest / period;
+        
+        var monthlyRepayment;
+        if (repaymentMethod === "interestOnly") {
+            monthlyRepayment = monthlyInterest;
+        } else if (repaymentMethod === "equalPrincipalAndInterest") {
+            monthlyRepayment = (principal / period) + (principal * rate / 12);
+        } else if (repaymentMethod === "equalPrincipal") {
+            monthlyRepayment = (principal / period) + (principal - (principal / period) * (period - 1)) * rate / 12;
+        }
 
         document.getElementById('interest').textContent = totalInterest.toFixed(2) + " 원";
         document.getElementById('monthlyInterest').textContent = monthlyInterest.toFixed(2) + " 원";
+        document.getElementById('monthlyRepayment').textContent = monthlyRepayment.toFixed(2) + " 원";
     }
 </script>
 
