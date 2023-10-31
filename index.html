@@ -144,11 +144,14 @@
         }
 
         document.getElementById('principal').addEventListener('input', function() {
-            var formattedValue = formatNumber(parseFormattedNumber(this.value));
-            this.value = formattedValue;
+            var value = this.value.replace(/[^0-9]/g, ''); // 숫자 외의 문자 제거
+            this.value = value; // 숫자만 남긴 값을 다시 설정
         });
+        
     </script>
-    
-    
 </body>
 </html>
+
+
+
+
